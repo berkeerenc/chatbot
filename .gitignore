@@ -1,0 +1,30 @@
+# Node.js 
+node_modules/
+
+# API key 
+.env
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+.DS_Store
+Thumbs.db
+
+# IDE/Editor 
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# npm cache or lock files 
+package-lock.json
+
+# Test coverage reports (if we add tests in the future)
+coverage/
+
+# Build outputs (currently none, but if you build in the future)
+dist/
+build/
