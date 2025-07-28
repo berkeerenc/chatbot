@@ -9,6 +9,37 @@ const chatForm = document.getElementById('chat-form');
 const userInput = document.getElementById('user-input');
 const sidebar = document.getElementById('sidebar');
 const sidebarToggle = document.getElementById('sidebar-toggle');
+const modelSelect = document.getElementById('modelSelect');
+const currentModelDisplay = document.getElementById('current-model-display');
+
+// Model selection management
+const modelNames = {
+  'llama3': 'LLaMA 3 (TinyLlama)',
+  'gpt4': 'GPT-4 (OpenAI)',
+  'mistral': 'Mistral 7B'
+};
+
+function getSelectedModel() {
+  return modelSelect.value;
+}
+
+function updateModelDisplay() {
+  const selectedModel = getSelectedModel();
+  const modelName = modelNames[selectedModel];
+  currentModelDisplay.textContent = `Current: ${modelName}`;
+}
+
+function saveModelPreference() {
+  localStorage.setItem('selectedModel', getSelectedModel());
+}
+
+function loadModelPreference() {
+  const savedModel = localStorage.getItem('selectedModel');
+  if (savedModel && modelNames[savedModel]) {
+    modelSelect.value = savedModel;
+  }
+  updateModelDisplay();
+}
 
 function saveChats() {
   localStorage.setItem('chats', JSON.stringify(chats));
@@ -81,7 +112,10 @@ chatForm.addEventListener('submit', async (e) => {
     const response = await fetch('/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ 
+        message: message,
+        model: getSelectedModel()
+      }),
     });
     const data = await response.json();
     appendMessage('bot', data.reply);
@@ -101,6 +135,12 @@ sidebarToggle.addEventListener('click', () => {
   document.body.classList.toggle('menu-open', !sidebar.classList.contains('collapsed'));
 });
 
+// Model selection event listener
+modelSelect.addEventListener('change', () => {
+  saveModelPreference();
+  updateModelDisplay();
+});
+
 // İlk yüklemede sohbet geçmişini ve aktif sohbeti göster
 if (chats.length === 0) {
   createChat();
@@ -108,6 +148,9 @@ if (chats.length === 0) {
   renderChatHistory();
   renderActiveChat();
 }
+
+// Load model preference and update display
+loadModelPreference();
 
 // Sayfa ilk açıldığında sidebar'ın durumuna göre body'ye menu-open class'ı ekle
 if (!sidebar.classList.contains('collapsed')) {

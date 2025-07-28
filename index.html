@@ -19,6 +19,15 @@
       </ul>
     </aside>
     <section class="chat-section">
+      <div class="model-selector">
+        <label for="modelSelect">AI Model:</label>
+        <select id="modelSelect">
+          <option value="llama3">LLaMA 3 (TinyLlama)</option>
+          <option value="gpt4">GPT-4 (OpenAI)</option>
+          <option value="mistral">Mistral 7B</option>
+        </select>
+        <div id="current-model-display"></div>
+      </div>
       <div class="chat-window" id="chat-window">
         <!-- Mesajlar burada görünecek -->
       </div>
